@@ -13,7 +13,7 @@ class EventLoop {
 public:
     EventLoop(const int &server_socket, const sockaddr_in &server_address, const socklen_t &address_len): server_socket(server_socket), server_address(server_address), address_len(address_len) {}
 
-    [[nodiscard]] int run() const;
+    int run() const;
 };
 
 #endif
