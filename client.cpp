@@ -45,7 +45,7 @@ void sync_println(const std::string &message) {
 
         sync_println("Client " + std::to_string(client_id) + " sent message to server: " + message);
 
-        if (const int n = static_cast<int>(read(client_socket, buffer, 1024)); n > 0) {
+        if (read(client_socket, buffer, sizeof(buffer)) > 0) {
             sync_println("Client " + std::to_string(client_id) + " received from server: " + buffer);
         }
     }

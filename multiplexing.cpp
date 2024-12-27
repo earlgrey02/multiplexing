@@ -65,7 +65,7 @@ int EventLoop::run() const {
                 } else {
                     const int client_socket = static_cast<int>(event.ident);
                     char buffer[MAX_BUFFER_SIZE];
-                    const long n = read(client_socket, buffer, MAX_BUFFER_SIZE);
+                    const long n = read(client_socket, buffer, sizeof(buffer));
 
                     if (n <= 0) {
                         std::cout << "Client disconnected, fd: " << client_socket << std::endl;

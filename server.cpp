@@ -6,11 +6,11 @@
 constexpr int PORT = 8080;
 
 int main() {
-    int server_socket;
     sockaddr_in address{};
     constexpr socklen_t address_len = sizeof(address);
+    const int server_socket = socket(AF_INET, SOCK_STREAM, 0);
 
-    if ((server_socket = socket(AF_INET, SOCK_STREAM, 0)) == 0) {
+    if (server_socket == 0) {
         std::cerr << "socket() failed";
 
         return EXIT_FAILURE;
