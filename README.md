@@ -2,18 +2,18 @@
 
 > **Kqueue를 통해 구현해보는 I/O 멀티플렉싱(I/O Multiplexing)**
 
-이 레포지토리는 BSD(Berkeley Software Distribution) 계열 운영체제의 `epoll()`인 `kqueue()`를 통해 I/O 멀티플렉싱을 구현한 예제이다.<br/>
+본 저장소는 BSD(Berkeley Software Distribution) 계열 운영체제의 `epoll()`인 `kqueue()`를 통해 I/O 멀티플렉싱을 구현한 예제에 대한 저장소이다.<br/>
 
 ## Description
 
 ### I/O Multiplexing
 
-I/O 멀티플렉싱이란 하나의 채널로 여러 파일 디스크럽터(File Descriptor)를 관리하는 기법이다.<br/>
+I/O 멀티플렉싱이란 하나의 채널로 여러 파일 디스크립터(File Descriptor)를 관리하는 기법이다.<br/>
 해당 기법을 소켓 프로그래밍에 활용하면 하나의 스레드로 여러 요청을 처리하는 고성능 네트워크 애플리케이션을 구현할 수 있다.
 
 I/O 멀티플렉싱을 구현하는 방법으로는 `select()`, `poll()`, `epoll()` 등의 시스템 콜(System call)이 있다.<br/>
-이 방법들 중에서 `select()`와 `poll()`은 파일 디스크럽터들의 상태를 커널(Kernel)이 아닌 유저 스페이스(User Space)에서 관리한다.<br/>
-그래서 커널과 유저 스페이스 간 통신이 많아져 성능적인 부분에서 단점을 가지는데, 이에 비해 `epoll()`은 커널에서 직접 파일 디스크럽터들의 상태를 관리해 오버헤드가 없으므로 일반적으로 `epoll()`을 사용해 I/O 멀티플렉싱을 구현한다.
+이 방법들 중에서 `select()`와 `poll()`은 파일 디스크립터들을 매번 유저 스페이스(User Space)에서 커널로 복사해야 하므로 성능적인 부분에서 단점을 가진다.
+이에 비해 `epoll()`은 커널에서 직접 파일 디스크립터들을 관리해 오버헤드(Overhead)가 적으므로 일반적으로 `epoll()`을 사용해 I/O 멀티플렉싱을 구현한다.
 
 ### Event Loop
 
@@ -22,7 +22,8 @@ I/O 멀티플렉싱을 구현하는 방법으로는 `select()`, `poll()`, `epoll
 이러한 입출력의 준비 상태 등은 발생한 이벤트들을 통해 판단하게 되는데, 이 이벤트들을 관리하는 방법이 앞서 설명한 `epoll()` 등의 이벤트 관리 시스템 콜이다.
 
 이벤트 루프를 활용한 대표적인 예시로 Node.js의 구성 요소 중 하나인 [libuv](https://github.com/libuv/libuv)나 Spring WebFlux에서 WAS(Web Application Server)로 사용하는 [Netty](https://github.com/netty/netty)가 있는데, 이들은 모두 `epoll()`이나 `kqueue()` 등의 시스템 콜을 사용해 이벤트 루프를 구현한다.<br/>
-이 중 Netty는 직접 `epoll()` 등의 시스템 콜을 사용하는 것은 아니고 이를 추상화한 Java NIO(New I/O)의 `Selector`를 사용한다.
+이 중 Netty는 `epoll()` 등의 시스템 콜을 사용하는 것은 아니고 이를 추상화한 Java NIO(New I/O)의 `Selector`를 사용한다.
+물론 네이티브 트랜스포트(Native Transport)를 사용하는 Netty는 시스템 콜을 직접 사용한다.
 
 ## How to use
 
